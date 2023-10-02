@@ -270,6 +270,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 	if (counter <= 0){
 		counter = 100;
 		update7SEG(index_led++);
+		HAL_GPIO_TogglePin(DOT_GPIO_Port, DOT_Pin);
 	}
 	if (index_led >= MAX_LED){
 		index_led = 0;
