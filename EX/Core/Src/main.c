@@ -81,8 +81,9 @@ void update7SEG(int index){
         	display7SEG(led_buffer[1]);
         	break;
         case 2:
+        	//Display the third 7SEG with led_buffer[2]
         	HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, GPIO_PIN_RESET);
-        	HAL_GPIO_WritePin(GPIOA, EN0_Pin|EN1_Pin|EN3_Pin, GPIO_PIN_SET);//Display the third 7SEG with led_buffer[2]
+        	HAL_GPIO_WritePin(GPIOA, EN0_Pin|EN1_Pin|EN3_Pin, GPIO_PIN_SET);
             display7SEG(led_buffer[2]);
         	break;
         case 3:
