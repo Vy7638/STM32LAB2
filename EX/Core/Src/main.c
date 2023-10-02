@@ -234,41 +234,33 @@ int flag = 1;
 int counter = 50;
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 	counter--;
-	switch (flag) {
-		case 1:
-			HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, GPIO_PIN_RESET);
-			HAL_GPIO_WritePin(GPIOA, EN1_Pin|EN2_Pin|EN3_Pin, GPIO_PIN_SET);
-			display7SEG(1);
-			break;
-		case 2:
-			HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, GPIO_PIN_RESET);
-			HAL_GPIO_WritePin(GPIOA, EN0_Pin|EN2_Pin|EN3_Pin, GPIO_PIN_SET);
-			display7SEG(2);
-			break;
-		case 3:
-			HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, GPIO_PIN_RESET);
-			HAL_GPIO_WritePin(GPIOA, EN0_Pin|EN1_Pin|EN3_Pin, GPIO_PIN_SET);
-			display7SEG(3);
-			break;
-		default:
-			HAL_GPIO_WritePin(GPIOA, EN0_Pin|EN1_Pin|EN2_Pin, GPIO_PIN_SET);
-			HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, GPIO_PIN_RESET);
-			display7SEG(0);
-			break;
-	}
 	if (counter <= 0){
 		counter = 50;
 		switch (flag) {
 			case 1:
+				HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, GPIO_PIN_RESET);
+				HAL_GPIO_WritePin(GPIOA, EN1_Pin|EN2_Pin|EN3_Pin, GPIO_PIN_SET);
+				display7SEG(1);
+				HAL_GPIO_TogglePin(DOT_GPIO_Port, DOT_Pin);
 				flag = 2;
 				break;
 			case 2:
+				HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, GPIO_PIN_RESET);
+				HAL_GPIO_WritePin(GPIOA, EN0_Pin|EN2_Pin|EN3_Pin, GPIO_PIN_SET);
+				display7SEG(2);
 				flag = 3;
 				break;
 			case 3:
+				HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, GPIO_PIN_RESET);
+				HAL_GPIO_WritePin(GPIOA, EN0_Pin|EN1_Pin|EN3_Pin, GPIO_PIN_SET);
+				display7SEG(3);
+				HAL_GPIO_TogglePin(DOT_GPIO_Port, DOT_Pin);
 				flag = 0;
 				break;
 			default:
+				HAL_GPIO_WritePin(GPIOA, EN0_Pin|EN1_Pin|EN2_Pin, GPIO_PIN_SET);
+				HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, GPIO_PIN_RESET);
+				display7SEG(0);
 				flag = 1;
 				break;
 		}
