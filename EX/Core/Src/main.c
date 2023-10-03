@@ -56,6 +56,20 @@ static void MX_TIM2_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+int timer0_counter = 0;
+int timer0_flag = 0;
+int TIMER_CYCLE = 10;
+void setTimer0(int duration){
+	timer0_counter = duration /TIMER_CYCLE;
+	timer0_flag = 0;
+}
+void timer_run(){
+	if(timer0_counter > 0){
+		timer0_counter--;
+		if(timer0_counter == 0) timer0_flag = 1;
+	}
+}
+
 void display7SEG(int num){
 	//cac chan cua led 7 doan tuong ung  0 1 2 3 4 5 6 7 8 9
 	uint16_t LED7SEG[10] = {0x003F, 0x0006, 0x005B, 0x004F, 0x0066, 0x006D, 0x007D, 0x0007, 0x007F, 0x006F};
@@ -151,6 +165,7 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  setTimer0(1000);
   while (1)
   {
 	  second++;
@@ -166,7 +181,11 @@ int main(void)
 	      hour = 0;
 	  }
 	  updateClockBuffer();
-	  HAL_Delay(1000);
+	  if(timer0_flag == 1){
+	       HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+	       setTimer0(2000);
+	  }
+	  //HAL_Delay(1000);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -308,6 +327,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 	if (index_led >= MAX_LED){
 		index_led = 0;
 	}
+	timer_run();
 }
 /* USER CODE END 4 */
 
