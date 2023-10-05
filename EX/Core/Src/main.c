@@ -19,7 +19,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-
+#include "software_timer.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -56,7 +56,7 @@ static void MX_TIM2_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-int timer0_counter = 0;
+/*int timer0_counter = 0;
 int timer0_flag = 0;
 int TIMER_CYCLE = 10;
 void setTimer0(int duration){
@@ -68,7 +68,7 @@ void timer_run(){
 		timer0_counter--;
 		if(timer0_counter == 0) timer0_flag = 1;
 	}
-}
+}*/
 
 void display7SEG(int num){
 	//cac chan cua led 7 doan tuong ung  0 1 2 3 4 5 6 7 8 9
@@ -168,23 +168,28 @@ int main(void)
   setTimer0(1000);
   while (1)
   {
-	  second++;
-	  if (second >= 60){
-	     second = 0;
-	     minute++;
-	  }
-	  if(minute >= 60){
-	      minute = 0;
-	      hour++;
-	  }
-	  if(hour >=24){
-	      hour = 0;
-	  }
-	  updateClockBuffer();
 	  if(timer0_flag == 1){
-	       HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
-	       setTimer0(2000);
+	      HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+	 	  second++;
+	 	  if (second >= 60){
+	 	     second = 0;
+	 	     minute++;
+	 	  }
+	 	  if(minute >= 60){
+	 	      minute = 0;
+	 	      hour++;
+	 	  }
+	 	  if(hour >=24){
+	 	      hour = 0;
+	 	  }
+	 	  updateClockBuffer();
+	      update7SEG(index_led++);
+	      if (index_led >= MAX_LED){
+	      	  index_led = 0;
+	      }
+	      setTimer0(1000);
 	  }
+
 	  //HAL_Delay(1000);
     /* USER CODE END WHILE */
 
@@ -315,18 +320,8 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-int counter = 25;
+
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
-	counter--;
-	if (counter <= 0){
-		counter = 25;
-		if (index_led == 0)
-			HAL_GPIO_TogglePin(DOT_GPIO_Port, DOT_Pin);
-		update7SEG(index_led++);
-		}
-	if (index_led >= MAX_LED){
-		index_led = 0;
-	}
 	timer_run();
 }
 /* USER CODE END 4 */
