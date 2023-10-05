@@ -19,7 +19,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-
+#include "software_timer.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -56,29 +56,7 @@ static void MX_TIM2_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-int timer0_counter = 0;
-int timer0_flag = 0;
-int timer1_counter = 0;
-int timer1_flag = 0;
-int TIMER_CYCLE = 10;
-void setTimer0(int duration){
-	timer0_counter = duration /TIMER_CYCLE;
-	timer0_flag = 0;
-}
-void setTimer1(int duration){
-	timer1_counter = duration /TIMER_CYCLE;
-	timer1_flag = 0;
-}
-void timer_run(){
-	if(timer0_counter > 0){
-		timer0_counter--;
-		if(timer0_counter == 0) timer0_flag = 1;
-	}
-	if(timer1_counter > 0){
-		timer1_counter--;
-		if(timer1_counter == 0) timer1_flag = 1;
-	}
-}
+
 
 void display7SEG(int num){
 	//cac chan cua led 7 doan tuong ung  0 1 2 3 4 5 6 7 8 9
@@ -176,8 +154,8 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  setTimer0(TIMER_CYCLE);
-  setTimer1(TIMER_CYCLE);
+  setTimer0(1000);
+  setTimer1(1000);
   while (1){
 	  if (timer0_flag) {
 		  HAL_GPIO_TogglePin(DOT_GPIO_Port, DOT_Pin);
